@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 
 const form = document.querySelector('form');
 const loadingElement = document.querySelector('.loading');
@@ -16,7 +18,6 @@ form.addEventListener('submit', function(event){
         name,
         content,
     };
-    console.log(tweet);
     form.style.display = 'none';
     loadingElement.style.display = ''; 
 
@@ -24,14 +25,13 @@ form.addEventListener('submit', function(event){
         method: 'POST',
         body: JSON.stringify(tweet),
         headers: {
-           'content-type': 'application/json',
-           'Accept': 'application/json'
+          'content-type': 'application/json'
         }
-    }).then(response => response.json())
+      }).then(response => response.json())
         .then(createdTweet => {
-            console.log(createdTweet);
-            form.reset();
-            form.style.display = '';
-            loadingElement.style.display = none; 
+        console.log(createdTweet);
+        form.reset();
+        form.style.display = '';
+        loadingElement.style.display = 'none'; 
     });
 });
