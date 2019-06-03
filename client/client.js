@@ -3,9 +3,12 @@
 
 const form = document.querySelector('form');
 const loadingElement = document.querySelector('.loading');
+const tweetElement = document.querySelector('.tweets');
 const API_URL = 'http://localhost:5000/tweets';
 
-loadingElement.style.display = 'none';
+loadingElement.style.display = '';
+
+listAllTweets();
 
 form.addEventListener('submit', function(event){
     event.preventDefault();
@@ -29,9 +32,36 @@ form.addEventListener('submit', function(event){
         }
       }).then(response => response.json())
         .then(createdTweet => {
-        console.log(createdTweet);
         form.reset();
         form.style.display = '';
-        loadingElement.style.display = 'none'; 
+        listAllTweets();
     });
 });
+
+function listAllTweets(){
+    tweetElement.innerHTML = ''; 
+    fetch(API_URL)
+        .then(response => response.json())
+        .then(tweets =>{
+            tweets.reverse();
+            tweets.forEach(tweet =>{
+                const div = document.createElement('div');
+
+                const header = document.createElement('h3');
+                header.textContent = tweet.name;
+
+                const contents = document.createElement('p');
+                contents.textContent = tweet.content;
+
+                const date = document.createElement('small');
+                date.textContent = new Date(tweet.created)
+
+                div.appendChild(header);
+                div.appendChild(contents);
+                div.appendChild(date);
+
+                tweetElement.appendChild(div);
+            });
+            loadingElement.style.display = 'none';
+        });
+}
